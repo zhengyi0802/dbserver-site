@@ -79,6 +79,9 @@
         return $res;
       } // end of list_tables
 
+      public function list_table_structure($tablename) {
+      } // end of list_table_structure
+
       public function insert_data($tablename, $json) {
       } // end of insert_data
 

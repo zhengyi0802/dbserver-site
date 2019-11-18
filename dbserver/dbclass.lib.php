@@ -84,11 +84,9 @@
           if ($this->conn == null) {
               echo "conn is null<br>";
           }
-          //$this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
           $result = $this->conn->query($sql);
           $dbs = array();
           foreach($result as $row) {
-             if ($debug) echo $row['Database']."<br>";
              array_push($dbs, $row['Database']);
           }
           return $dbs;
@@ -100,27 +98,59 @@
       public function getDBname() {
         return $this->dbname;
       } // end of function getDBname
-/*
-      public function create_table($tablename, $json) {
+
+      public function create_table($tablename, $vararray) {
         try {
+          $str  = "SET AUTOCOMMIT = 0;\n";
+          $str .= "START TRANSACTION;\n";
+          $str .= "CREATE TABLE `".$tablename."` (\n" ;
+          $str .= "	`id` int(11) NOT NULL,\n";
+          foreach($vararray as $row) {
+            $str .= "	`".$row['name']."` ".$row['type'];
+            if ($row['notnull']) $str .= " NOT NULL";
+            if ($row['default']) $str .= " DEFAULT '".$row['default']."'";
+            $str .= ",\n";
+          }
+          $str .= "	`status` enum('INACTIVE','LOCKED','ACTIVE') NOT NULL DEFAULT 'INACTIVE'\n";
+          $str .= ") ENGINE=INNODB;\n";
+          $str .= "ALTER TABLE `".$tablename."`\n";
+          $str .= "	ADD PRIMARY KEY (`id`);\n";
+          $str .= "ALTER TABLE `".$tablename."`\n";
+          $str .= "	MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;\n";
+          $str .= "COMMIT;\n";
+          //echo $str."<br>";
+          $result = $this->conn->query($str);
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
       } // end of function create_table
 
-      public function modify_table($tablename, $json, $flag = false) {
-        if ($flag) {
-            try {
-            } catch (PDOException $e) {
-              die("DB ERROR: ".$e->getMessage());
-            }
+      public function add_column($tablename, $vararray) {
+        try {
+          $str = "ALTER TABLE `".$tablename."`\n	ADD ";
+          $fixed = false;
+          foreach($vararray as $row) {
+             if ($fixed) $str .= ", ";
+             $str .= " `".$row['name']."` ".$row['type'];
+             if ($row['notnull']) $str .= " NOT NULL";
+             if ($row['default']) $str .= " DEFAULT '".$row['default']."'";
+             $str .= " AFTER `".$row['position']."` ";
+             $fixed = true;
+          }
+          $str .= ";\n";
+          //echo $str."<br>";
+          $result = $this->conn->query($str);
+        } catch (PDOException $e) {
+          die("DB ERROR: ".$e->getMessage());
         }
+
       } // end of function modify_table
 
-      public function delete_table($tablename, $flag = false) {
+      public function drop_table($tablename, $flag = false) {
         if ($flag) {
+            $sql = "DROP TABLE ".$tablename;
             try {
-
+              $result = $this->conn->query($sql);
             } catch (PDOException $e) {
               die("DB ERROR: ".$e->getMessage());
             }
@@ -128,23 +158,15 @@
       } // end of function delete_table
 
       public function list_tables() {
-        if (!this->dbname) {
-            print_r("No Database used!");
-            return;
-        }
         try {
-            $sql = "LIST TABLES FROM ".$this->dbname;
-            $result = $conn->query($sql);
-            $tbls = array();
-            while ($tbl = $result->fetchColumn(0)) {
-              if ($debug) echo $tbl."<br>";
-              push_array($tbls, $tbl);
-            }
+            $sql = "SHOW TABLES";
+            $result = $this->conn->query($sql);
+            return $result->fetchAll(PDO::FETCH_NUM);
         } catch (PDOException $e) {
-          die("DB ERROR: ".$e->getMessage());
+          echo("DB ERROR: ".$e->getMessage());
         }
       } // end of function list_tables
-
+/*
       public function insert_data($table, $json) {
         try {
 

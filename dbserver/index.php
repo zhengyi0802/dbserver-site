@@ -1,41 +1,31 @@
 <?php
-    require_once "db_config.php";
-    require_once "mysql.lib.php";
+    require_once("db_config.php");
+    require_once("dbclass.lib.php");
 
-    echo "connect databases<br>";
-    echo "host = " . $host . "<br>";
-    echo "user = " . $user . "<br>";
-    echo "pass = " . $pass . "<br>";
-    $DAO = new mysqlobj($host, $user, $pass);
+    echo "Login Server<br>";
+    echo "host = ".$host."<br>";
+    echo "port = ".$port."<br>";
+    echo "user = ".$user."<br>";
+    echo "pass = ".$pass."<br>";
+    echo "dbname=".$dbname."<br>";
 
-    echo "<br>";
-    echo "create database test2<br>";
-    $DAO->create_database("test2");
+    $dbo = new dbclass($host, null, $user, $pass, null);
+    echo "Ok <br>";
 
-    echo "list databases<br>";
-    $result = $DAO->list_databases();
-
-    if (!$result) echo "no database<br>";
-    else echo "databases list are as follows: <br>";
-
-    foreach ($result as $dbname) {
-        echo $dbname . "<br>";
+    echo "List Databases<br>";
+    $res = $dbo->list_databases();
+    foreach ($res as $dbn) {
+       echo $dbn."<br>";
     }
 
+    echo "Use Database 'test'<br>";
+    $dbo->use_db($dbname);
+    echo "Ok<br>";
 
-    echo "delete database test2<br>";
-    $DAO->drop_database("test2");
+    echo "Create Database 'test2'<br>";
+    $dbname2 = "test2";
+    $dbo->create_db($dbname2);
+    echo "Ok<br>";
 
-
-    echo "use database test<br>";
-    $DAO->use_database("test");
-
-    echo "list tables of database test<br>";
-    $result = $DAO->list_tables();
-    foreach ($result as $tablename) {
-        echo $tablename . "<br>";
-    }
-
-    
 
 ?>

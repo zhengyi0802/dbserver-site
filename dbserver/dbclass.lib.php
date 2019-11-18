@@ -106,10 +106,13 @@
           $str .= "CREATE TABLE `".$tablename."` (\n" ;
           $str .= "	`id` int(11) NOT NULL,\n";
           foreach($vararray as $row) {
-            $str .= "	`".$row['name']."` ".$row['type'];
-            if ($row['notnull']) $str .= " NOT NULL";
-            if ($row['default']) $str .= " DEFAULT '".$row['default']."'";
-            $str .= ",\n";
+             if ($row['name'] == "id" || $row['name'] == "status") {
+                 $row['name'] = $tablename."_".$row['name']; // change name
+             }
+             $str .= "	`".$row['name']."` ".$row['type'];
+             if ($row['notnull']) $str .= " NOT NULL";
+             if ($row['default']) $str .= " DEFAULT '".$row['default']."'";
+             $str .= ",\n";
           }
           $str .= "	`status` enum('INACTIVE','LOCKED','ACTIVE') NOT NULL DEFAULT 'INACTIVE'\n";
           $str .= ") ENGINE=INNODB;\n";
@@ -131,6 +134,9 @@
           $fixed = false;
           foreach($vararray as $row) {
              if ($fixed) $str .= ", ";
+             if ($row['name'] == "id" || $row['name'] == "status") {
+                 $row['name'] = $tablename."_".$row['name']; // change name
+             }
              $str .= " `".$row['name']."` ".$row['type'];
              if ($row['notnull']) $str .= " NOT NULL";
              if ($row['default']) $str .= " DEFAULT '".$row['default']."'";

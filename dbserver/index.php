@@ -43,7 +43,7 @@
     echo "Ok<br>";
 
     echo "delete table 'test2'<br>";
-    $res = $dbo->drop_table('test2', false);
+    $res = $dbo->drop_table('test2', true);
     echo "Ok<br>";
 
     echo "insert table 'test2'<br>";
@@ -63,9 +63,9 @@
     echo "Ok<br>";
     echo "alter table 'test2' for add column 'memo' <br>\n";
     $struct=null;
-    $struct[0]['name'] = "memo";
-    $struct[0]['type'] = "varchar(255)";
-    $struct[0]['notnull'] = false;
+    $struct[0]['name'] = "id";
+    $struct[0]['type'] = "varchar(20)";
+    $struct[0]['notnull'] = true;
     $struct[0]['default'] = null;
     $struct[0]['position'] = "jsondata";
     $res = $dbo->add_column('test2', $struct);

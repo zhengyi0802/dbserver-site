@@ -1,6 +1,6 @@
 <?php
-    require_once("db_config.php");
-    require_once("dbclass.lib.php");
+    require_once("config/db_config.php");
+    require_once("libs/dbclass.lib.php");
 
     echo "Login Server<br>";
     echo "host = ".$host."<br>";

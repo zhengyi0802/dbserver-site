@@ -27,5 +27,7 @@
     $dbo->create_db($dbname2);
     echo "Ok<br>";
 
-
+    echo "Drop Database 'test2'<br>";
+    $dbo->drop_db($dbname2);
+    echo "Ok<br>";
 ?>

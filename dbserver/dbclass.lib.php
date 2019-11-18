@@ -51,9 +51,6 @@
         try {
           $sql = "CREATE DATABASE " . $this->dbname;
           $resulr = $this->conn->exec($sql);
-          if (!$result) {
-               print_r($conn->errorInfo());
-          }
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
@@ -72,22 +69,13 @@
         }
       } // end of function use_db
 
-      public function drop_db() {
-        if (!$this->dbname) {
-            print_r("Successful");
-        }
-        $sql = "DROP DATABASE ".$this->dbname;
-        $this->dbname = null;
-
+      public function drop_db($dbname) {
+        $sql = "DROP DATABASE ".$dbname;
         try {
           $result = $this->conn->exec($sql);
-          if (!$result) {
-              print_r($conn->errorInfo());
-          }
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
-
       } // end of function drop_db
 
       public function list_databases() {

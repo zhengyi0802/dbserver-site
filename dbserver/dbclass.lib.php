@@ -143,7 +143,7 @@
              $str .= " AFTER `".$row['position']."` ";
              $fixed = true;
           }
-          $str .= ";\n";
+          $str .= ";\nCOMMIT;\n";
           //echo $str."<br>";
           $result = $this->conn->query($str);
         } catch (PDOException $e) {
@@ -172,30 +172,68 @@
           echo("DB ERROR: ".$e->getMessage());
         }
       } // end of function list_tables
-/*
-      public function insert_data($table, $json) {
-        try {
 
+      public function insert_data($tablename, $vararray) {
+        try {
+           $str = "INSERT INTO `".$tablename."` (";
+           $fixed = false;
+           foreach($vararray as $key) {
+              if ($fixed) $str .= ", ";
+              if ($key['key'] == "id" || $key['key'] == "status") {
+                  $key['key'] = $tablename."_".$key['key'];
+              }
+              $str .= "`".$key['key']."`";
+              $fixed = true;
+           }
+           $str .= ", `status`) VALUES (";
+           $fixed = false;
+           foreach($vararray as $val) {
+              if ($fixed) $str .= ", ";
+              if ($val['val'] == "CURRENT_TIME") {
+                  $str .= $val['val'];
+              } else if ($val['val'] == null) {
+                  $str .= "null";
+              } else {
+                  $str .= "'".$val['val']."'";
+              }
+              $fixed = true;
+           }
+           $str .= ", 'ACTIVE');\nCOMMIT;\n";
+           echo $str."<br>";
+           $result = $this->conn->query($str);
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
       } // end of function insert_data
 
-      public function modify_data($table, $json, $condition) {
+      public function modify_data($tablename, $vararray, $cond) {
+        $str = "UPDATE `".$tablename."` SET ";
+        $fixed = false;
+        foreach($vararray as $row) {
+            if ($fixed) $str .= ", ";
+            if ($row['key'] == 'id' || $row['key'] == 'status') {
+                $row['key'] = $tablename."_".$row['key'];
+            }
+            $str .= "`".$row['key']."` = '".$row['val']."'"; 
+            $fixed = true;
+        }
+        $str .= " WHERE ".$cond.";\nCOMMIT;\n";
         try {
-
+          $result = $this->conn->query($str);
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
       } // end of function modify_data
 
-      public function delete_data($table, $condifion, $flag = false) {
+      public function delete_data($tablename, $cond, $flag = false) {
         if ($flag) {
+            $str = "DELETE FROM `".$tablename."` WHERE ".$cond;
         } else {
+            $str = "UPDATE `".$tablename."` SET `status` = 'INACTIVE' WHERE ".$cond;
         }
-
+        $str .= ";\nCOMMIT;\n";
         try {
-
+          $result = $this->conn->query($str);
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
@@ -203,13 +241,14 @@
 
       public function query_data($sql) {
         try {
-          $result = $conn->query($sql);
-          print_r($result);
+          $result = $this->conn->query($sql);
+          return $result->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
           die("DB ERROR: ".$e->getMessage());
         }
+
       } // end of function query_data
-*/
+
     } // end of class dbclass
 ?>
 

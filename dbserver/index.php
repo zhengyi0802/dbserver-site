@@ -70,5 +70,44 @@
     $struct[0]['position'] = "jsondata";
     $res = $dbo->add_column('test2', $struct);
     echo "Ok<br>";
-    
+
+    echo "insert data to 'test2' <br>";
+    $data = null;
+    $data[0]['key'] = 'name';
+    $data[0]['val'] = 'testforme';
+    $data[1]['key'] = 'createdate';
+    $data[1]['val'] = "CURRENT_TIME";
+    $data[2]['key'] = 'jsondata';
+    $data[2]['val'] = null;
+    $data[3]['key'] = "id";
+    $data[3]['val'] = "m2213442";
+    //$data[4]['key'] = "memo";
+    //$data[4]['val'] = null;
+    $res = $dbo->insert_data("test2", $data);
+    echo "Ok<br>";
+
+    echo "query data from 'test2' <br>";
+    $sql = "SELECT * FROM `test2` WHERE 1;<br>";
+    $res = $dbo->query_data($sql);
+    foreach($res as $data) {
+        foreach($data as $key => $val) {
+            echo $key."=".$val."<br>";
+        }
+    }
+    echo "Ok<br>";
+
+    echo "delete a record from 'test2' <br>";
+    $cond = "`id` = 1";
+    $res = $dbo->delete_data("test2", $cond, false);
+    echo "Ok<br>";
+
+    echo "modify a record from 'test2' <br>";
+    $data = null;
+    $data[0]['key'] = 'name';
+    $data[0]['val'] = 'dddddddd';
+    $data[1]['key'] = 'id';
+    $data[1]['val'] = 'm2222222';
+    $cond = "`id` = 1";
+    $res = $dbo->modify_data("test2", $data, $cond);
+    echo "Ok<br>";
 ?>

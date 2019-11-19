@@ -19,6 +19,7 @@
     }
 
     echo "Use Database 'test'<br>";
+    $dbname = "test";
     $dbo->use_db($dbname);
     echo "Ok<br>";
 

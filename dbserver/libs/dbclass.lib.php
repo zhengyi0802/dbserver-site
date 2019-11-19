@@ -29,6 +29,9 @@
         try {
           $this->conn = new PDO($dsn, $user, $pass);
           $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          if ($this->dbname != null) {
+              $result = $this->use_db($dbname);
+          }
         } catch (PDOException $e) {
           //$conn = null;
           die("DB ERROR: ".$e->getMessage());
@@ -170,6 +173,16 @@
           echo("DB ERROR: ".$e->getMessage());
         }
       } // end of function list_tables
+
+      public function describe_table($tablename) {
+        try {
+            $sql = "DESCRIBE ".$tablename;
+            $result = $this->conn->query($sql);
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+          echo("DB ERROR: ".$e->getMessage());
+        }
+      } // end of function describe_table
 
       public function insert_data($tablename, $vararray) {
         try {

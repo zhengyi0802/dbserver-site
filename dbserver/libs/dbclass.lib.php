@@ -60,7 +60,6 @@
 
       public function use_db($dbname) {
         $this->dbname = $dbname;
-        echo "dbname = ".$this->dbname."<br>";
         try {
           $sql = "USE " . $this->dbname;
 
@@ -168,7 +167,15 @@
         try {
             $sql = "SHOW TABLES";
             $result = $this->conn->query($sql);
-            return $result->fetchAll(PDO::FETCH_NUM);
+            //return $result->fetchAll(PDO::FETCH_NUM);
+
+            $tables = array();
+            foreach($result as $row) {
+               //echo $row[0]."<br>";
+               array_push($tables, $row[0]);
+            }
+            return $tables;
+
         } catch (PDOException $e) {
           echo("DB ERROR: ".$e->getMessage());
         }

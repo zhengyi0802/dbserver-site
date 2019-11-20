@@ -15,10 +15,12 @@
     }
 
     if ($action == 'createdatabase') {
-        if ($dbname != null)
+        if ($dbname != null) {
             require_once("mobile/createdatabase.php");
-        else
+            echo "Create Database `".$dbname."` succeful!";
+        } else {
             echo "Database name not found!<br>";
+        }
     }
 
     if ($action == 'deletedatabase') {
@@ -51,14 +53,13 @@
 
     if ($action == 'deletetable') {
         if (($dbname != null) && ($tablename != null))
-            require_once("mobild/deletetable.php");
+            require_once("mobile/deletetable.php");
         else
             echo "Database/Table name not found!<br>";
     }
-
+/*
     if ($action == 'modifytable') {
         if (($dbname != null) && ($tablename != null))
-
         else
             echo "Database/Table name not found!<br>";
     }
@@ -80,5 +81,5 @@
         else
             echo "Database/Table name not found!<br>";
     }
-
+*/
 ?>

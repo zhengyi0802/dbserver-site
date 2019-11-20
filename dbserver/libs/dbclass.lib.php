@@ -87,7 +87,12 @@
           $result = $this->conn->query($sql);
           $dbs = array();
           foreach($result as $row) {
-             array_push($dbs, $row['Database']);
+             if ($row['Database'] != 'mysql' &&
+                 $row['Database'] != 'information_schema' &&
+                 $row['Database'] != 'performance_schema' &&
+                 $row['Database'] != 'sys') {
+                 array_push($dbs, $row['Database']);
+             }
           }
           return $dbs;
         } catch (PDOException $e) {

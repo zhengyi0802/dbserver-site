@@ -57,6 +57,15 @@
         else
             echo "Database/Table name not found!<br>";
     }
+
+    if ($action == 'querydata') {
+        if (($dbname != null) && ($tablename != null))
+            require_once("mobile/querydata.php");
+        else
+            echo "Query data error!<br>";
+    }
+
+
 /*
     if ($action == 'modifytable') {
         if (($dbname != null) && ($tablename != null))

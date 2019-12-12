@@ -65,6 +65,12 @@
             echo "Query data error!<br>";
     }
 
+    if ($action == 'queryfieldsalias') {
+        if (($dbname != null) && ($tablename != null))
+            require_once("mobile/queryfieldsalias.php");
+        else
+            echo "Query data error!<br>";
+    }
 
 /*
     if ($action == 'modifytable') {

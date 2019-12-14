@@ -4,10 +4,14 @@
         if($_GET['action'] != null) $action = $_GET['action'];
         if($_GET['dbname'] != null) $dbname = $_GET['dbname'];
         if($_GET['tablename'] != null) $tablename = $_GET['tablename'];
+        if($_GET['username'] != null) $username = $_GET['username'];
+        if($_GET['password'] != null) $password = $_GET['password'];
     } else {
         if($_POST['action'] != null) $action = $_POST['action'];
         if($_POST['dbname'] != null) $dbname = $_POST['dbname'];
         if($_POST['tablename'] != null) $tablename = $_POST['tablename'];
+        if($_POST['username'] != null) $username = $_POST['username'];
+        if($_POST['password'] != null) $password = $_POST['password'];
     }
 
     if ($action == 'listdatabases') {
@@ -70,6 +74,14 @@
             require_once("mobile/queryfieldsalias.php");
         else
             echo "Query data error!<br>";
+    }
+
+    if ($action == 'login') {
+        if (($dbname != null) && ($username != null)) {
+            require_once("mobile/login.php");
+        } else {
+            echo "error for dbname or username<br>";
+        }
     }
 
 /*
